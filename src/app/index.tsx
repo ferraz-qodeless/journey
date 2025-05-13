@@ -1,5 +1,5 @@
 import { Input } from "@/components/Input";
-import { Image, Text, View } from "react-native";
+import { Image, Keyboard, Text, View } from "react-native";
 import {
   MapPin,
   Calendar as IconCalendar,
@@ -10,14 +10,24 @@ import {
 import { colors } from "@/styles/colors";
 import { Button } from "@/components/Button";
 import { Fragment, useState } from "react";
+import { Modal } from "@/components/Modal";
+import { Calendar } from "@/components/Calendar";
 
 enum StepForm {
   TRIP_DETAILS = 1,
   ADD_EMAIL = 2,
 }
 
+enum MODAL {
+  NONE = 0,
+  CALENDAR = 1,
+  GUESTS = 2,
+}
+
 export default function Index() {
   const [stepForm, setStepForm] = useState<StepForm>(StepForm.TRIP_DETAILS);
+  const [showModal, setShowModal] = useState(MODAL.NONE);
+
   function handleNextStepForm(step: StepForm) {
     if (stepForm === StepForm.TRIP_DETAILS) {
       setStepForm(StepForm.ADD_EMAIL);
@@ -52,6 +62,11 @@ export default function Index() {
           <Input.Field
             placeholder="Quando?"
             editable={stepForm === StepForm.TRIP_DETAILS}
+            onFocus={() => Keyboard.dismiss()}
+            showSoftInputOnFocus={false}
+            onPressIn={() =>
+              stepForm === StepForm.TRIP_DETAILS && setShowModal(MODAL.CALENDAR)
+            }
           />
         </Input>
 
@@ -89,6 +104,20 @@ export default function Index() {
           termos de uso e políticas de privaacidade
         </Text>
       </Text>
+      <Modal
+        title="Selecionar data"
+        subtitle="Selecionar a data de ida e volta da viagem"
+        visible={showModal === MODAL.CALENDAR}
+        onClose={() => setShowModal(MODAL.NONE)}
+      >
+        <View className="gap-4 mt-4">
+          <Calendar />
+          <Button onPress={() => setShowModal(MODAL.NONE)}>
+            <Button.Title>Confirmar</Button.Title>
+            <ArrowRight size={20} color={colors.zinc[950]} />
+          </Button>
+        </View>
+      </Modal>
     </View>
   );
 }
