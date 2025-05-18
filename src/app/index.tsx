@@ -11,7 +11,7 @@ import {
 import { colors } from "@/styles/colors";
 import { calendarUtils, DatesSelected } from "@/utils/calendarUtils";
 import { Button } from "@/components/Button";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Modal } from "@/components/Modal";
 import { Calendar } from "@/components/Calendar";
 import { DateData } from "react-native-calendars";
@@ -21,6 +21,7 @@ import { validateInput } from "@/utils/validateInput";
 import { tripStorage } from "@/storage/trip";
 import { router } from "expo-router";
 import { tripServer } from "@/server/trip-server";
+import { Loading } from "@/components/Loading";
 
 enum StepForm {
   TRIP_DETAILS = 1,
@@ -127,6 +128,33 @@ export default function Index() {
       );
       console.log(error);
     }
+  }
+
+  async function getTrip() {
+    try {
+      const tripID = await tripStorage.get();
+
+      if (!tripID) {
+        return setIsGettingTrip(false);
+      }
+
+      const trip = await tripServer.getById(tripID);
+
+      if (trip) {
+        return router.navigate("/trip/" + trip.id);
+      }
+    } catch (error) {
+      setIsGettingTrip(false);
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getTrip();
+  }, []);
+
+  if (isGettingTrip) {
+    return <Loading />;
   }
 
   async function createTrip() {
