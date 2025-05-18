@@ -12,11 +12,14 @@ type InputProps = TextInputProps & {
 export function Input({ children, variant = "primary", ...rest }: InputProps) {
   return (
     <View
-      className={clsx("w-full h-16 flex-row items-center gap-2", {
-        "h-14 px-4 rounded-lg border border-zinc-900": variant === "primary",
-        "bg-zinc-950": variant === "secondary",
-        "bg-zinc-800": variant === "tertiary",
-      })}
+      className={clsx(
+        "px-2 w-full h-16 flex-row items-center rounded-lg gap-2",
+        {
+          "h-14 px-4 rounded-lg border border-zinc-900": variant === "primary",
+          "bg-zinc-950": variant === "secondary",
+          "bg-zinc-800": variant === "tertiary",
+        }
+      )}
     >
       {children}
     </View>

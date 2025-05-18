@@ -24,10 +24,10 @@ import { Loading } from "@/components/Loading";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Modal } from "@/components/Modal";
-// import { Activities } from "./activities";
-// import { Details } from "./details";
 import { validateInput } from "@/utils/validateInput";
 import { tripStorage } from "@/storage/trip";
+import { Activities } from "./activities";
+import { Details } from "./details";
 
 export type TripData = TripDetails & { when: string };
 
@@ -213,7 +213,7 @@ export default function Trip() {
 
   return (
     <View className="flex-1 px-5 pt-16">
-      <Input variant="tertiary">
+      <Input variant="tertiary" className="mt-4">
         <MapPin color={colors.zinc[400]} size={20} />
         <Input.Field value={tripDetails.when} readOnly />
 
@@ -226,13 +226,13 @@ export default function Trip() {
         </TouchableOpacity>
       </Input>
 
-      {/* {option === "activity" ? (
+      {option === "activity" ? (
         <Activities tripDetails={tripDetails} />
       ) : (
         <Details tripId={tripDetails.id} />
-      )} */}
+      )}
 
-      <View className="w-full absolute -bottom-1 self-center justify-end pb-5 z-10 bg-zinc-950">
+      <View className="mb-4 w-full absolute -bottom-1 self-center justify-end pb-5 z-10 bg-zinc-950">
         <View className="w-full flex-row bg-zinc-900 p-4 rounded-lg border border-zinc-800 gap-2">
           <Button
             className="flex-1"
